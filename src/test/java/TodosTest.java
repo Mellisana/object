@@ -31,7 +31,7 @@ public class TodosTest {
     }
 
     @Test
-    public void testSearchByQuery() {
+    public void SearchByQuery() {
         SimpleTask simpleTask = new SimpleTask(5, "Позвонить родителям");
         String[] subtasks = {"Молоко", "Яйца", "Хлеб"};
         Epic epic = new Epic(55, subtasks);
@@ -62,5 +62,62 @@ public class TodosTest {
         Task[] expectedEmptyResult = {};
         Task[] actualEmptyResult = todos.search("несуществующий запрос");
         assertArrayEquals(expectedEmptyResult, actualEmptyResult);
+    }
+
+    @Test
+    public void SearchTask() {
+        SimpleTask simpleTask1 = new SimpleTask(1, "Позвонить маме");
+        SimpleTask simpleTask2 = new SimpleTask(2, "Купить продукты");
+        Epic epic = new Epic(3, new String[]{"Написать отчет"});
+        Meeting meeting = new Meeting(4, "Обсудить проект", "Проект А", "Среда");
+
+        Todos todos = new Todos();
+        todos.add(simpleTask1);
+        todos.add(simpleTask2);
+        todos.add(epic);
+        todos.add(meeting);
+
+        Task[] foundTasks = todos.search("рассказать");
+
+        Task[] expectedTasks = {};
+        assertArrayEquals(expectedTasks, foundTasks);
+    }
+
+    @Test
+    public void SearchFoundOneTask() {
+        SimpleTask simpleTask1 = new SimpleTask(1, "Позвонить маме");
+        SimpleTask simpleTask2 = new SimpleTask(2, "Купить продукты");
+        Epic epic = new Epic(3, new String[]{"Написать отчет"});
+        Meeting meeting = new Meeting(4, "Обсудить проект", "Проект А", "Среда");
+
+        Todos todos = new Todos();
+        todos.add(simpleTask1);
+        todos.add(simpleTask2);
+        todos.add(epic);
+        todos.add(meeting);
+
+        Task[] foundTasks = todos.search("мам");
+
+        Task[] expectedTasks = {simpleTask1};
+        assertArrayEquals(expectedTasks, foundTasks);
+    }
+
+    @Test
+    public void testSearchFoundTasks() {
+        SimpleTask simpleTask1 = new SimpleTask(1, "Позвонить маме");
+        SimpleTask simpleTask2 = new SimpleTask(2, "Купить продукты");
+        Epic epic = new Epic(3, new String[]{"Написать отчет"});
+        Meeting meeting = new Meeting(4, "Обсудить проект", "Проект А", "Среда");
+
+        Todos todos = new Todos();
+        todos.add(simpleTask1);
+        todos.add(simpleTask2);
+        todos.add(epic);
+        todos.add(meeting);
+
+        Task[] foundTasks = todos.search("про");
+
+        Task[] expectedTasks = {simpleTask2, epic};
+        assertArrayEquals(expectedTasks, foundTasks);
     }
 }
